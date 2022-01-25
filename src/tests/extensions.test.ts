@@ -1,4 +1,4 @@
-import exHelpers from './extensions';
+import exHelpers from '../extensions';
 
 test('string get/set/clear extension value', () => {
     let sample: fhir4.Coding = { system: 'system', code: 'c', display: 'blah' };
