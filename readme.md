@@ -51,6 +51,17 @@ Removing all extensions with a specific URL
 exHelpers.clearExtension(sample, 'https://example.org/exturl');
 ```
 
+Setting an extension on a primitive property
+``` javascript
+let patient: fhir4.Patient = { resourceType: 'Patient', birthDate: '1974-12-25' };
+exHelpers.setExtension(patient._birthDate, 
+    {
+        url: 'http://hl7.org/fhir/StructureDefinition/patient-birthTime', 
+        valueDateTime: '1974-12-25T14:35:45-05:00'
+    },
+    () => { return patient._birthDate = {} });
+```
+
 ## Support ##
 TBD - there's not really much here...
 For questions and broader discussions, use the FHIR Implementers chat on [Zulip][javascript-zulip].
