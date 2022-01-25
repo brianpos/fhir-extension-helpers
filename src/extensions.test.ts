@@ -64,7 +64,7 @@ test('batch get/set/clear extension value', () => {
 
 
 // Test setting primitive property extension
-test('batch get/set/clear extension value', () => {
+test('set primitive property extension value', () => {
     let patient: fhir4.Patient = { resourceType: 'Patient', birthDate: '1970-01-01' };
     expect(JSON.stringify(patient)).toBe('{"resourceType":"Patient","birthDate":"1970-01-01"}');
     exHelpers.setExtension(patient, { url: 'exturl', valueString: 'test' });
@@ -74,9 +74,28 @@ test('batch get/set/clear extension value', () => {
     expect(result).toBe('test');
     exHelpers.clearExtension(patient, 'exturl');
 
-    // for native property extensions need to create the extensions too
+    // for native property extensions need to create the extensions too (unless using the createExtensionElement optional method)
     patient._birthDate = { extension: [] };
     exHelpers.setExtension(patient._birthDate, { url: 'http://example.org/time', valueString: 'test2' });
     expect(JSON.stringify(patient)).toBe('{"resourceType":"Patient","birthDate":"1970-01-01","_birthDate":{"extension":[{"url":"http://example.org/time","valueString":"test2"}]}}');
 })
 
+// Test setting primitive property extension
+test('set non existing primitive extension value', () => {
+    let patient: fhir4.Patient = { resourceType: 'Patient', birthDate: '1970-01-01' };
+    expect(JSON.stringify(patient)).toBe('{"resourceType":"Patient","birthDate":"1970-01-01"}');
+
+    // for native property extensions need to create the extensions too - use the extra method
+    exHelpers.setExtension(patient._birthDate, { url: 'http://example.org/time', valueString: 'test2' }, () => { return patient._birthDate = {} });
+    expect(JSON.stringify(patient)).toBe('{"resourceType":"Patient","birthDate":"1970-01-01","_birthDate":{"extension":[{"url":"http://example.org/time","valueString":"test2"}]}}');
+})
+
+test('throw when no primitive extension base is provided', () => {
+    let patient: fhir4.Patient = { resourceType: 'Patient', birthDate: '1970-01-01' };
+    expect(JSON.stringify(patient)).toBe('{"resourceType":"Patient","birthDate":"1970-01-01"}');
+
+    // the _birthDate doesn't exist, and there's no way to create it, so should throw
+    expect(() => {
+        exHelpers.setExtension(patient._birthDate, { url: 'http://example.org/time', valueString: 'test2' });
+    }).toThrowError('Attempt to set an Extension without a createExtension method');
+})

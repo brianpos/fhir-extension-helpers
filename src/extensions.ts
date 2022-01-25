@@ -4,14 +4,45 @@ export default {
     clearExtension,
     getExtension,
     getExtensions,
-    getExtensionBooleanValue,
-    getExtensionStringValue,
-    getExtensionStringValues,
-    getExtensionIntegerValue,
-    getExtensionMarkdownValue,
     hasExtension,
     hasExtensionAny,
     setExtension,
+
+    getExtensionStringValue,
+    getExtensionStringValues,
+    setExtensionStringValue,
+    addExtensionStringValue,
+
+    getExtensionIntegerValue,
+    setExtensionIntegerValue,
+
+    getExtensionBooleanValue,
+    setExtensionBooleanValue,
+
+    getExtensionMarkdownValue,
+    setExtensionMarkdownValue,
+
+    getExtensionDecimalValue,
+    setExtensionDecimalValue,
+
+    getExtensionExpressionValue,
+    getExtensionExpressionValues,
+
+    getExtensionCodingValue,
+    getExtensionCodingValues,
+
+    getExtensionUrlValue,
+    getExtensionUrlValues,
+    setExtensionUrlValue,
+    addExtensionUrlValue,
+
+    getExtensionCodeValue,
+    getExtensionCodeValues,
+    setExtensionCodeValue,
+    addExtensionCodeValue,
+
+    getExtensionCodeableConceptValue,
+    getExtensionCodeableConceptValues,
 }
 
 /**
@@ -50,8 +81,18 @@ export function getExtensions(element: fhir4.Element | undefined, url: string): 
  * (If you want to remove the extension with this url, use ClearExtension(url))
  * @param element - The fhir resource/element to set the extension on
  * @param value - The new value for the extension to be set
+ * @param createExtensionElement - Function to create the extension element if it doesn't already exist (important for primitive extensions that normally aren't there)
  */
-export function setExtension(element: fhir4.Element, value: fhir4.Extension) {
+export function setExtension(element: fhir4.Element | undefined, value: fhir4.Extension, createExtensionElement?: () => fhir4.Element) {
+    if (!element) {
+        if (!createExtensionElement) {
+            throw "Attempt to set an Extension without a createExtension method";
+        }
+        element = createExtensionElement();
+        if (!element) {
+            throw "createExtension method did not create a new element";
+        }
+    }
     if (!element.extension) element.extension = [];
     var extValues = element.extension.filter((v, i, arr) => {
         if (v.url === value.url) return true;
@@ -73,8 +114,18 @@ export function setExtension(element: fhir4.Element, value: fhir4.Extension) {
  * Add an extension value, if an extension with this value already exists, it will remain.
  * @param element - The fhir resource/element to add the extension to
  * @param value - The new value for the extension to be added
+ * @param createExtensionElement - Function to create the extension element if it doesn't already exist (important for primitive extensions that normally aren't there)
  */
-export function addExtension(element: fhir4.Element, value: fhir4.Extension) {
+export function addExtension(element: fhir4.Element | undefined, value: fhir4.Extension, createExtensionElement?: () => fhir4.Element) {
+    if (!element) {
+        if (!createExtensionElement) {
+            throw "Attempt to set an Extension without a createExtension method";
+        }
+        element = createExtensionElement();
+        if (!element) {
+            throw "createExtension method did not create a new element";
+        }
+    }
     if (!element.extension) element.extension = [];
     // Add in the extension with this value
     element.extension.push(value);
@@ -126,34 +177,137 @@ export function hasExtensionAny(element: fhir4.Element | undefined, urls: string
     return false;
 }
 
-
+// --------------------------------------------------------------------------
+// String
 export function getExtensionStringValue(element: fhir4.Element | undefined, url: string): string | undefined {
     return getExtension(element, url)?.valueString;
 }
 
 export function getExtensionStringValues(element: fhir4.Element | undefined, url: string): string[] | undefined {
-    return getExtensions(element, url)?.filter((item) => { return !!item.valueString }).map<string>((item) => { return item.valueString ?? ''; });
+    return getExtensions(element, url)?.filter((item) => { return !!item.valueString })
+        .map<string>((item) => { return item.valueString ?? ''; });
 }
 
+export function setExtensionStringValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueString: value }, createExtensionElement);
+}
+
+export function addExtensionStringValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    addExtension(element, { url: url, valueString: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Integer
 export function getExtensionIntegerValue(element: fhir4.Element | undefined, url: string): number | undefined {
     return getExtension(element, url)?.valueInteger;
 }
 
+export function setExtensionIntegerValue(element: fhir4.Element, url: string, value: number, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueInteger: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Boolean
 export function getExtensionBooleanValue(element: fhir4.Element | undefined, url: string): boolean | undefined {
     return getExtension(element, url)?.valueBoolean;
 }
 
-export function setExtensionBooleanValue(element: fhir4.Element, url: string, value: boolean) {
-    setExtension(element, { url: url, valueBoolean: value });
+export function setExtensionBooleanValue(element: fhir4.Element, url: string, value: boolean, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueBoolean: value }, createExtensionElement);
 }
 
+// --------------------------------------------------------------------------
+// Markdown
 export function getExtensionMarkdownValue(element: fhir4.Element | undefined, url: string): string | undefined {
-    if (!element || !element.extension) return undefined;
-    var extValues = element.extension.filter((v, i, arr) => {
-        if (v.url === url) return true;
-        return false;
-    });
-    if (extValues && extValues.length > 0) return extValues[0].valueMarkdown;
-    return undefined;
+    return getExtension(element, url)?.valueMarkdown;
 }
 
+export function setExtensionMarkdownValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueMarkdown: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Decimal
+export function getExtensionDecimalValue(element: fhir4.Element | undefined, url: string): number | undefined {
+    return getExtension(element, url)?.valueDecimal;
+}
+
+export function setExtensionDecimalValue(element: fhir4.Element, url: string, value: number, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueDecimal: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Expression
+export function getExtensionExpressionValue(element: fhir4.Element | undefined, url: string): fhir4.Expression | undefined {
+    return getExtension(element, url)?.valueExpression;
+}
+
+export function getExtensionExpressionValues(element: fhir4.Element | undefined, url: string): fhir4.Expression[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return !!item.valueExpression })
+        .map<fhir4.Expression | undefined>((item) => { return item.valueExpression; })
+        .filter<fhir4.Expression>((input): input is fhir4.Expression => true);
+}
+
+// --------------------------------------------------------------------------
+// Coding
+export function getExtensionCodingValue(element: fhir4.Element | undefined, url: string): fhir4.Coding | undefined {
+    return getExtension(element, url)?.valueCoding;
+}
+
+export function getExtensionCodingValues(element: fhir4.Element | undefined, url: string): fhir4.Coding[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return item.valueCoding !== undefined })
+        .map<fhir4.Coding | undefined>((item) => { return item.valueCoding; })
+        .filter<fhir4.Coding>((input): input is fhir4.Coding => true);
+}
+
+// --------------------------------------------------------------------------
+// Url
+export function getExtensionUrlValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueUrl;
+}
+
+export function getExtensionUrlValues(element: fhir4.Element | undefined, url: string): string[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return !!item.valueUrl })
+        .map<string>((item) => { return item.valueUrl ?? ''; });
+}
+
+export function setExtensionUrlValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueUrl: value }, createExtensionElement);
+}
+
+export function addExtensionUrlValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    addExtension(element, { url: url, valueUrl: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Code
+export function getExtensionCodeValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueCode;
+}
+
+export function getExtensionCodeValues(element: fhir4.Element | undefined, url: string): string[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return !!item.valueCode })
+        .map<string>((item) => { return item.valueCode ?? ''; });
+}
+
+export function setExtensionCodeValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueCode: value }, createExtensionElement);
+}
+
+export function addExtensionCodeValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    addExtension(element, { url: url, valueCode: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// CodeableConcept
+export function getExtensionCodeableConceptValue(element: fhir4.Element | undefined, url: string): fhir4.CodeableConcept | undefined {
+    return getExtension(element, url)?.valueCodeableConcept;
+}
+
+export function getExtensionCodeableConceptValues(element: fhir4.Element | undefined, url: string): fhir4.CodeableConcept[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return item.valueCodeableConcept !== undefined })
+        .map<fhir4.CodeableConcept | undefined>((item) => { return item.valueCodeableConcept; })
+        .filter<fhir4.CodeableConcept>((input): input is fhir4.CodeableConcept => true);
+}
+
+// --------------------------------------------------------------------------
