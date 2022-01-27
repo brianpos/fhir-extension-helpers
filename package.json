@@ -1,6 +1,6 @@
 {
   "name": "fhir-extension-helpers",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "FHIR Extension helper methods",
   "main": "dist/extensions.js",
   "files": [
@@ -23,17 +23,19 @@
   ],
   "author": "Brian Postlethwaite",
   "license": "BSD-3-Clause",
+  "bugs": "https://github.com/brianpos/fhir-extension-helpers/issues",
+  "repository": "github:brianpos/fhir-extension-helpers",
   "devDependencies": {
     "@types/fhir": "^0.0.34",
     "@types/jest": "^27.4.0",
     "jest": "^27.4.7",
     "typescript": "^4.5.5"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "jest": {
     "moduleDirectories": [
       "dist",
+      "dist/test",
       "node_modules"
     ],
     "moduleFileExtensions": [

@@ -99,3 +99,14 @@ test('throw when no primitive extension base is provided', () => {
         exHelpers.setExtension(patient._birthDate, { url: 'http://example.org/time', valueString: 'test2' });
     }).toThrowError('Attempt to set an Extension without a createExtension method');
 })
+
+test('uri values', () => {
+    let sample: fhir4.Coding = { system: 'system', code: 'c', display: 'blah' };
+    expect(JSON.stringify(sample)).toBe('{"system":"system","code":"c","display":"blah"}');
+    exHelpers.setExtensionUriValue(sample, 'http://example.org/system', 'test')
+    exHelpers.addExtensionUriValue(sample, 'http://example.org/system', 'test2')
+    expect(JSON.stringify(sample)).toBe('{"system":"system","code":"c","display":"blah","extension":[{"url":"http://example.org/system","valueUri":"test"},{"url":"http://example.org/system","valueUri":"test2"}]}');
+
+    const results = exHelpers.getExtensionUriValues(sample, 'http://example.org/system');
+    expect(results).toStrictEqual(['test', 'test2']);
+})

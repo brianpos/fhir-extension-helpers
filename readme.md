@@ -20,7 +20,7 @@ Once things settle in, it will be deployed to the public npm registry
 Setting a specific extension value (complex datatype properties/elements)
 Note: Will remove any other extensions with this extension URL too.
 ``` javascript
-import exHelpers from './extensions'; // this will be from npm pacakge once published
+import exHelpers from 'fhir-extension-helpers';
 
 let sample: fhir4.Coding = { system: 'system', code: 'c', display: 'blah' };
 exHelpers.setExtension(sample, { url: 'https://example.org/exturl', valueBoolean: true });

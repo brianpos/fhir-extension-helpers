@@ -43,6 +43,26 @@ export default {
 
     getExtensionCodeableConceptValue,
     getExtensionCodeableConceptValues,
+
+    getExtensionDurationValue,
+    getExtensionDurationValues,
+
+    getExtensionQuantityValue,
+    getExtensionQuantityValues,
+
+    getExtensionUriValue,
+    getExtensionUriValues,
+    setExtensionUriValue,
+    addExtensionUriValue,
+
+    getExtensionCanonicalValue,
+    getExtensionCanonicalValues,
+    setExtensionCanonicalValue,
+    addExtensionCanonicalValue,
+
+    getExtensionReferenceValue,
+    getExtensionReferenceValues,
+
 }
 
 /**
@@ -308,6 +328,82 @@ export function getExtensionCodeableConceptValues(element: fhir4.Element | undef
     return getExtensions(element, url)?.filter((item) => { return item.valueCodeableConcept !== undefined })
         .map<fhir4.CodeableConcept | undefined>((item) => { return item.valueCodeableConcept; })
         .filter<fhir4.CodeableConcept>((input): input is fhir4.CodeableConcept => true);
+}
+
+// --------------------------------------------------------------------------
+// Duration
+export function getExtensionDurationValue(element: fhir4.Element | undefined, url: string): fhir4.Duration | undefined {
+    return getExtension(element, url)?.valueDuration;
+}
+
+export function getExtensionDurationValues(element: fhir4.Element | undefined, url: string): fhir4.Duration[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return item.valueDuration !== undefined })
+        .map<fhir4.Duration | undefined>((item) => { return item.valueDuration; })
+        .filter<fhir4.Duration>((input): input is fhir4.Duration => true);
+}
+
+// --------------------------------------------------------------------------
+// Quantity
+export function getExtensionQuantityValue(element: fhir4.Element | undefined, url: string): fhir4.Quantity | undefined {
+    return getExtension(element, url)?.valueQuantity;
+}
+
+export function getExtensionQuantityValues(element: fhir4.Element | undefined, url: string): fhir4.Quantity[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return item.valueQuantity !== undefined })
+        .map<fhir4.Quantity | undefined>((item) => { return item.valueQuantity; })
+        .filter<fhir4.Quantity>((input): input is fhir4.Quantity => true);
+}
+
+// --------------------------------------------------------------------------
+// Uri
+export function getExtensionUriValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueUri;
+}
+
+export function getExtensionUriValues(element: fhir4.Element | undefined, url: string): string[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return item.valueUri !== undefined })
+        .map<string | undefined>((item) => { return item.valueUri; })
+        .filter<string>((input): input is string => true);
+}
+
+export function setExtensionUriValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueUri: value }, createExtensionElement);
+}
+
+export function addExtensionUriValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    addExtension(element, { url: url, valueUri: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Canonical
+export function getExtensionCanonicalValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueCanonical;
+}
+
+export function getExtensionCanonicalValues(element: fhir4.Element | undefined, url: string): string[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return item.valueCanonical !== undefined })
+        .map<string | undefined>((item) => { return item.valueCanonical; })
+        .filter<string>((input): input is string => true);
+}
+
+export function setExtensionCanonicalValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueCanonical: value }, createExtensionElement);
+}
+
+export function addExtensionCanonicalValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    addExtension(element, { url: url, valueCanonical: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Reference
+export function getExtensionReferenceValue(element: fhir4.Element | undefined, url: string): fhir4.Reference | undefined {
+    return getExtension(element, url)?.valueReference;
+}
+
+export function getExtensionReferenceValues(element: fhir4.Element | undefined, url: string): fhir4.Reference[] | undefined {
+    return getExtensions(element, url)?.filter((item) => { return item.valueReference !== undefined })
+        .map<fhir4.Reference | undefined>((item) => { return item.valueReference; })
+        .filter<fhir4.Reference>((input): input is fhir4.Reference => true);
 }
 
 // --------------------------------------------------------------------------
