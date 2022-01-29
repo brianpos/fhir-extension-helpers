@@ -1,6 +1,6 @@
 {
   "name": "fhir-extension-helpers",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "FHIR Extension helper methods",
   "main": "dist/extensions.js",
   "files": [

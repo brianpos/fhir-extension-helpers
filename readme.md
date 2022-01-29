@@ -22,7 +22,7 @@ Note: Will remove any other extensions with this extension URL too.
 ``` javascript
 import exHelpers from 'fhir-extension-helpers';
 
-let sample: fhir4.Coding = { system: 'system', code: 'c', display: 'blah' };
+let sample = { system: 'system', code: 'c', display: 'blah' };
 exHelpers.setExtension(sample, { url: 'https://example.org/exturl', valueBoolean: true });
 ```
 
@@ -33,17 +33,17 @@ exHelpers.addExtension(sample, { url: 'https://example.org/exturl', valueString:
 
 Retrieving a specific untyped extension value (as first only - no warning if there are multiple values)
 ``` javascript
-let result: fhir4.Extension | undefined = exHelpers.getExtension(sample, 'https://example.org/exturl');
+let result = exHelpers.getExtension(sample, 'https://example.org/exturl');
 ```
 
 Retrieving a specific typed extension value (as first only - no warning if there are multiple values)
 ``` javascript
-let result: string | undefined = exHelpers.getExtensionStringValue(sample, 'https://example.org/exturl');
+let result = exHelpers.getExtensionStringValue(sample, 'https://example.org/exturl');
 ```
 
 Retrieving the collection of untyped extension values
 ``` javascript
-let result: fhir4.Extension[] | undefined = exHelpers.getExtensions(sample, 'https://example.org/exturl');
+let result = exHelpers.getExtensions(sample, 'https://example.org/exturl');
 ```
 
 Removing all extensions with a specific URL
@@ -53,7 +53,7 @@ exHelpers.clearExtension(sample, 'https://example.org/exturl');
 
 Setting an extension on a primitive property
 ``` javascript
-let patient: fhir4.Patient = { resourceType: 'Patient', birthDate: '1974-12-25' };
+let patient = { resourceType: 'Patient', birthDate: '1974-12-25' };
 exHelpers.setExtension(patient._birthDate, 
     {
         url: 'http://hl7.org/fhir/StructureDefinition/patient-birthTime', 

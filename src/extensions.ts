@@ -25,6 +25,18 @@ export default {
     getExtensionDecimalValue,
     setExtensionDecimalValue,
 
+    getExtensionDateValue,
+    setExtensionDateValue,
+
+    getExtensionDateTimeValue,
+    setExtensionDateTimeValue,
+
+    getExtensionTimeValue,
+    setExtensionTimeValue,
+
+    getExtensionInstantValue,
+    setExtensionInstantValue,
+
     getExtensionExpressionValue,
     getExtensionExpressionValues,
 
@@ -254,6 +266,46 @@ export function getExtensionDecimalValue(element: fhir4.Element | undefined, url
 
 export function setExtensionDecimalValue(element: fhir4.Element, url: string, value: number, createExtensionElement?: () => fhir4.Element) {
     setExtension(element, { url: url, valueDecimal: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Date
+export function getExtensionDateValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueDate;
+}
+
+export function setExtensionDateValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueDate: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// DateTime
+export function getExtensionDateTimeValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueDateTime;
+}
+
+export function setExtensionDateTimeValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueDateTime: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Time
+export function getExtensionTimeValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueTime;
+}
+
+export function setExtensionTimeValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueTime: value }, createExtensionElement);
+}
+
+// --------------------------------------------------------------------------
+// Instant
+export function getExtensionInstantValue(element: fhir4.Element | undefined, url: string): string | undefined {
+    return getExtension(element, url)?.valueInstant;
+}
+
+export function setExtensionInstantValue(element: fhir4.Element, url: string, value: string, createExtensionElement?: () => fhir4.Element) {
+    setExtension(element, { url: url, valueInstant: value }, createExtensionElement);
 }
 
 // --------------------------------------------------------------------------
